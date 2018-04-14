@@ -1,0 +1,24 @@
+{
+  "name": "mws-restaurant-stage-1-master",
+  "version": "1.0.0",
+  "description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadnazzar/udacity-restaurant.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadnazzar/udacity-restaurant/issues"
+  },
+  "homepage": "https://github.com/hadnazzar/udacity-restaurant#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-responsive": "^2.10.0"
+  }
+}
