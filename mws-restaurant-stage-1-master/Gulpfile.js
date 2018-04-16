@@ -13,9 +13,9 @@ gulp.task('default', function () {
         width: 480,
         rename: { suffix: '-480px' },
       }, {
-        quality: 40,
-        width: 800,
-        rename: { suffix: '-800px' },
+        quality: 25,
+        width: 600,
+        rename: { suffix: '-600px' },
       }, {
         // Compress, strip metadata, and rename original image
         rename: { suffix: '-original' },
