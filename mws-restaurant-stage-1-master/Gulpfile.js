@@ -12,11 +12,13 @@ gulp.task('default', function () {
         quality: 35,
         width: 480,
         rename: { suffix: '-480px' },
-      }, {
-        quality: 25,
-        width: 600,
-        rename: { suffix: '-600px' },
-      }, {
+      }, 
+      // {
+      //   quality: 25,
+      //   width: 600,
+      //   rename: { suffix: '-600px' },
+      // }, 
+      {
         // Compress, strip metadata, and rename original image
         rename: { suffix: '-original' },
       }]

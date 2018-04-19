@@ -16,20 +16,54 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        // const restaurants = json.restaurants;
-        const restaurants = json;
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
+
+
+    var request = window.indexedDB.open("indexedDB", 1);
+
+    request.onerror = function (event) {
+      // Handle errors!
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', DBHelper.DATABASE_URL);
+      xhr.onload = () => {
+        if (xhr.status === 200) { // Got a success response from server!
+          const json = JSON.parse(xhr.responseText);
+          // const restaurants = json.restaurants;
+          const restaurants = json;
+          callback(null, restaurants);
+        } else { // Oops!. Got an error from server.
+          const error = (`Request failed. Returned status of ${xhr.status}`);
+          callback(error, null);
+        }
+      };
+      xhr.send();
     };
-    xhr.send();
+    request.onsuccess = function (event) {
+      // Do something with the request.result!
+      db.transaction("restaurants").objectStore("restaurants").getAll().onsuccess = function (event) {
+        var restaurants = event.target.result;
+        if (restaurants.length > 0) {
+          callback(null, restaurants);
+        }
+        else {
+          let xhr = new XMLHttpRequest();
+          xhr.open('GET', DBHelper.DATABASE_URL);
+          xhr.onload = () => {
+            if (xhr.status === 200) { // Got a success response from server!
+              const json = JSON.parse(xhr.responseText);
+              // const restaurants = json.restaurants;
+              const restaurants = json;
+              callback(null, restaurants);
+            } else { // Oops!. Got an error from server.
+              const error = (`Request failed. Returned status of ${xhr.status}`);
+              callback(error, null);
+            }
+          };
+          xhr.send();
+        }
+      };
+    };
+
+
   }
 
   /**
@@ -163,9 +197,49 @@ class DBHelper {
       title: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant),
       map: map,
-      animation: google.maps.Animation.DROP}
+      animation: google.maps.Animation.DROP
+    }
     );
     return marker;
   }
 
 }
+
+
+var request = window.indexedDB.open("indexedDB", 1);
+
+request.onerror = function (event) {
+  // Generic error handler for all errors targeted at this database's
+  // requests!
+  alert("Database error: " + event.target.errorCode);
+};
+request.onsuccess = function (event) {
+  // Do something with request.result!
+  db = event.target.result;
+};
+
+
+// This event is only implemented in recent browsers   
+request.onupgradeneeded = function (event) {
+  // Save the IDBDatabase interface 
+  var db = event.target.result;
+
+  // Create an objectStore for this database
+  var objectStore = db.createObjectStore("restaurants", { keyPath: "id" });
+
+  // Use transaction oncomplete to make sure the objectStore creation is 
+  // finished before adding data into it.
+  objectStore.transaction.oncomplete = function (event) {
+    // Store values in the newly created objectStore.
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        var restaurantObjectStore = db.transaction("restaurants", "readwrite").objectStore("restaurants");
+        restaurants.forEach(function (restaurant) {
+          restaurantObjectStore.add(restaurant);
+        });
+      }
+    });
+  };
+};

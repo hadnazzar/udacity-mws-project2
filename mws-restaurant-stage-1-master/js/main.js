@@ -1,25 +1,29 @@
-let restaurants,
-  neighborhoods,
-  cuisines
+window.restaurants;
 var map
 var markers = []
 
 var deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', function(e) {
+window.addEventListener('beforeinstallprompt', function (e) {
   console.log('beforeinstallprompt Event fired');
   e.preventDefault();
 
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
 
-  return false;
+  return false; Î
 });
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  window.dbExists = true;
+  var request = window.indexedDB.open("MyDatabase");
+  request.onupgradeneeded = function (e) {
+    e.target.transaction.abort();
+    window.dbExists = false;
+  }
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -152,8 +156,8 @@ createRestaurantHTML = (restaurant) => {
   const imageSrc = DBHelper.imageUrlForRestaurant(restaurant);
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.alt="Restaurant " + restaurant.name;
-  image.srcset= [`${imageSrc}-320px.jpg 320w,${imageSrc}-480px.jpg 480w,${imageSrc}-600px.jpg 600w`]
+  image.alt = "Restaurant " + restaurant.name;
+  image.srcset = [`${imageSrc}-320px.jpg 320w,${imageSrc}-480px.jpg 480w`]
   li.append(image);
 
   const name = document.createElement('h2');
@@ -199,9 +203,9 @@ registerServiceWorker = () => {
       scope: '/'
     }).then(function (reg) {
       // console.log('Service Worker registered');
-      reg.addEventListener('updatefound',function(){
-        reg.installing.addEventListener('statechange',function(){
-          if(this.state === 'installed'){
+      reg.addEventListener('updatefound', function () {
+        reg.installing.addEventListener('statechange', function () {
+          if (this.state === 'installed') {
 
           }
         })
