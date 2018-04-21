@@ -30,6 +30,9 @@
         <select id="cuisines-select" aria-label="Cuisines" name="cuisines" onchange="updateRestaurants()" tabindex="0">
           <option value="all">All Cuisines</option>
         </select>
+        <button type="button" id="show-map-markers" aria-label="MapMarkersbutton" name="mapmarkers" tabindex="0">
+          Show Restaurants markers
+        </button>
       </div>
       <ul id="restaurants-list" ></ul>
     </section>
@@ -37,7 +40,7 @@
 
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC3mlvPLWWMeQz1tnYZjHjZbtFb5ksBMU&libraries=places&callback=initMap"></script>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC3mlvPLWWMeQz1tnYZjHjZbtFb5ksBMU&libraries=places&callback=initMap"></script> -->
 
 
   <footer id="footer">

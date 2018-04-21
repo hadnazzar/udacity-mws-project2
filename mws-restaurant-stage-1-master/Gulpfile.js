@@ -1,7 +1,17 @@
 var gulp = require('gulp');
 var responsive = require('gulp-responsive');
+var minify = require('gulp-minify');
+let cleanCSS = require('gulp-clean-css');
+
+
 
 gulp.task('default', function () {
+  gulp.start('minify-images')
+  gulp.start('compressJs')
+  gulp.start('minify-css')
+});
+
+gulp.task('minify-images',function(){
   return gulp.src('img/*.{png,jpg}')
     .pipe(responsive({
       '*.jpg': [{
@@ -18,11 +28,31 @@ gulp.task('default', function () {
       //   width: 600,
       //   rename: { suffix: '-600px' },
       // }, 
-      {
-        // Compress, strip metadata, and rename original image
-        rename: { suffix: '-original' },
-      }]
+      // {
+      //   // Compress, strip metadata, and rename original image
+      //   rename: { suffix: '-original' },
+      // }
+    ]
     }
   ))
     .pipe(gulp.dest('imgSrc'));
+})
+
+gulp.task('compressJs', function() {
+  gulp.src('js/*.js')
+    .pipe(minify({
+        ext:{
+            src:'-debug.js',
+            min:'.js'
+        },
+        exclude: ['tasks'],
+        ignoreFiles: ['.combo.js', '-min.js']
+    }))
+    .pipe(gulp.dest('dist'))
+});
+
+gulp.task('minify-css', () => {
+  return gulp.src('css/*.css')
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulp.dest('dist'));
 });

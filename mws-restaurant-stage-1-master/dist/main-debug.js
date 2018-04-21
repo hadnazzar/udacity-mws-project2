@@ -18,7 +18,6 @@ window.addEventListener('beforeinstallprompt', function (e) {
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  document.getElementById("map-container").style.display = "none"
   window.dbExists = true;
   var request = window.indexedDB.open("MyDatabase");
   request.onupgradeneeded = function (e) {
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
   fetchNeighborhoods();
   fetchCuisines();
-  updateRestaurants();
 });
 
 /**
@@ -88,35 +86,17 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize Google map, called from HTML.
  */
-
-document.getElementById("show-map-markers").addEventListener("click", function(){
-  showMapMarkers()
-});
-
-
-showMapMarkers = () => {
-  document.getElementById("show-map-markers").remove()
-  document.getElementById("map-container").style.display = "block"
-  var head = document.getElementsByTagName('head')[0];
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.onload = function () {
-    console.log("map initialized");
-    let loc = {
-      lat: 40.722216,
-      lng: -73.987501
-    };
-    self.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 12,
-      center: loc,
-      scrollwheel: false
-    });
-    addMarkersToMap();
-
-  }
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAC3mlvPLWWMeQz1tnYZjHjZbtFb5ksBMU&libraries=places&callback=initMap';
-  head.appendChild(script);
-  
+window.initMap = () => {
+  let loc = {
+    lat: 40.722216,
+    lng: -73.987501
+  };
+  self.map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: loc,
+    scrollwheel: false
+  });
+  updateRestaurants();
 }
 
 /**
@@ -165,6 +145,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
+  addMarkersToMap();
 }
 
 /**
@@ -238,22 +219,22 @@ registerServiceWorker = () => {
 registerServiceWorker();
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   let lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
   let active = false;
 
-  const lazyLoad = function () {
+  const lazyLoad = function() {
     if (active === false) {
       active = true;
 
-      setTimeout(function () {
-        lazyImages.forEach(function (lazyImage) {
+      setTimeout(function() {
+        lazyImages.forEach(function(lazyImage) {
           if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
             lazyImage.src = lazyImage.dataset.src;
             lazyImage.srcset = lazyImage.dataset.srcset;
             lazyImage.classList.remove("lazy");
 
-            lazyImages = lazyImages.filter(function (image) {
+            lazyImages = lazyImages.filter(function(image) {
               return image !== lazyImage;
             });
 

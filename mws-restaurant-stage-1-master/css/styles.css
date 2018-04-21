@@ -147,6 +147,7 @@ nav h2 a {
   padding: 8px;
   font-size:9.5pt;
   max-width: 190px;
+  margin-top: 0px;
 }
 
 /* ====================== Restaurant Listing ====================== */
@@ -340,8 +341,21 @@ nav h2 a {
   color: #666;
 }
 
-  
+#show-map-markers{
+  width: 160px;
+  background: white;
+  height: 36px;
+  float: right;
+}
 
+@media (max-width: 575px){
+  .filter-options{
+    height: 120px;
+  }
+  #show-map-markers{
+    margin-top: 12px;
+  }
+}
 
 @media (max-width: 420px){
   .filter-options select{
