@@ -17,7 +17,7 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-
+    //IndexedDB
     var request = window.indexedDB.open("indexedDB", 1);
 
     request.onerror = function (event) {
@@ -206,6 +206,7 @@ class DBHelper {
 }
 
 
+//IndexedDB
 var request = window.indexedDB.open("indexedDB", 1);
 
 request.onerror = function (event) {
