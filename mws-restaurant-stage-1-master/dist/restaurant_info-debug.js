@@ -4,7 +4,8 @@ var map;
 /**
  * Initialize Google map, called from HTML.
  */
-window.initMap = () => {
+
+document.addEventListener('DOMContentLoaded', (event) => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
@@ -14,11 +15,11 @@ window.initMap = () => {
         center: restaurant.latlng,
         scrollwheel: false
       });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
+    fillBreadcrumb();
+    DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
   });
-}
+})
 
 /**
  * Get current restaurant from page URL.
@@ -59,7 +60,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img lazy'
   image.alt = restaurant.name;
-  image.srcset= [`${imageSrc}-320px.jpg 320w,${imageSrc}-480px.jpg 480w`]
+  image.srcset = [`${imageSrc}-320px.jpg 320w,${imageSrc}-480px.jpg 480w`]
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -141,7 +142,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
@@ -163,5 +164,3 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
-

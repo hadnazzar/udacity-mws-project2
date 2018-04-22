@@ -114,7 +114,7 @@ showMapMarkers = () => {
     addMarkersToMap();
 
   }
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAC3mlvPLWWMeQz1tnYZjHjZbtFb5ksBMU&libraries=places&callback=initMap';
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAC3mlvPLWWMeQz1tnYZjHjZbtFb5ksBMU&libraries=places';
   head.appendChild(script);
   
 }
